@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SANS Codified · Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f5f1e8;
+    --paper-2:#ebe5d4;
+    --ink:#1a1915;
+    --ink-soft:#4a4840;
+    --ink-faint:#8a8678;
+    --rule:#2b2a24;
+    --accent: oklch(62% 0.16 28); /* warm terracotta */
+    --accent-soft: oklch(92% 0.04 28);
+    --yellow: oklch(92% 0.12 95);
+    --green-check: oklch(58% 0.14 150);
+    --red-x: oklch(55% 0.17 25);
+    --hand: 'Kalam', 'Architects Daughter', cursive;
+    --hand-2: 'Caveat', cursive;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--hand);}
+  body{
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+
+  /* ====== Top chrome ====== */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--paper);
+    border-bottom:2px solid var(--rule);
+    padding:14px 28px 0;
+  }
+  .topbar-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .brand{display:flex;align-items:baseline;gap:14px}
+  .brand h1{
+    font-family:var(--hand-2); font-weight:700;
+    font-size:36px; margin:0; letter-spacing:.5px;
+  }
+  .brand .sub{font-family:var(--mono); font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:1.5px}
+  .brand .stamp{
+    border:2px solid var(--accent); color:var(--accent);
+    padding:2px 10px; transform:rotate(-3deg);
+    font-family:var(--hand-2); font-size:15px; font-weight:700;
+  }
+
+  .tabs{display:flex;gap:2px;margin-top:18px;flex-wrap:wrap}
+  .tab{
+    font-family:var(--hand); font-weight:700; font-size:15px;
+    background:var(--paper-2); color:var(--ink-soft);
+    border:2px solid var(--rule); border-bottom:none;
+    padding:8px 16px 10px; cursor:pointer;
+    border-radius:10px 10px 0 0;
+    transform:translateY(2px);
+    position:relative;
+  }
+  .tab .num{font-family:var(--mono);font-size:10px;color:var(--ink-faint);display:block;letter-spacing:1px}
+  .tab:hover{background:#efe9d6}
+  .tab.active{
+    background:var(--paper); color:var(--ink);
+    border-bottom:2px solid var(--paper);
+    z-index:2;
+  }
+  .tab.active .num{color:var(--accent)}
+
+  /* ====== Direction pages ====== */
+  .page{display:none;padding:36px 28px 120px;max-width:1400px;margin:0 auto}
+  .page.active{display:block}
+
+  .direction-head{
+    display:grid; grid-template-columns: 1fr auto; gap:24px;
+    margin-bottom:28px; align-items:end;
+    border-bottom:2px dashed var(--rule); padding-bottom:18px;
+  }
+  .direction-head h2{
+    font-family:var(--hand-2); font-size:52px; margin:0 0 4px; line-height:1;
+  }
+  .direction-head .pitch{font-size:18px;color:var(--ink-soft);max-width:680px;line-height:1.45}
+  .direction-head .meta{font-family:var(--mono);font-size:11px;color:var(--ink-faint);text-align:right;line-height:1.6}
+  .direction-head .meta b{color:var(--ink);font-weight:500}
+
+  .screens{
+    display:grid; gap:28px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 1200px){ .screens{grid-template-columns:1fr} }
+
+  .screen{
+    background:#fefcf5;
+    border:2px solid var(--rule);
+    border-radius:6px;
+    box-shadow: 4px 4px 0 var(--rule);
+    display:flex;flex-direction:column;
+    min-height:620px;
+    overflow:hidden;
+    position:relative;
+  }
+  .screen-label{
+    position:absolute; top:-14px; left:18px;
+    background:var(--yellow); border:2px solid var(--rule);
+    padding:2px 12px; transform:rotate(-1.5deg);
+    font-family:var(--hand-2); font-weight:700; font-size:17px;
+    z-index:5;
+  }
+  .screen-chrome{
+    display:flex;align-items:center;gap:6px;
+    padding:8px 10px; border-bottom:1.5px solid var(--rule);
+    background:var(--paper-2);
+  }
+  .dot{width:10px;height:10px;border:1.5px solid var(--rule);border-radius:50%}
+  .urlbar{
+    flex:1; background:#fff; border:1.5px solid var(--rule);
+    border-radius:20px; padding:3px 12px;
+    font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+    margin-left:8px;
+  }
+  .screen-body{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden;position:relative}
+
+  /* ====== Sketchy primitives ====== */
+  .box{border:2px solid var(--rule);border-radius:6px;padding:10px 12px;background:#fff}
+  .box-soft{border:1.5px dashed var(--ink-soft);border-radius:6px;padding:10px 12px;background:transparent}
+  .btn{
+    display:inline-block; border:2px solid var(--rule); background:#fff;
+    padding:6px 14px; border-radius:22px; font-family:var(--hand); font-weight:700;
+    font-size:13px; cursor:pointer;
+  }
+  .btn.primary{background:var(--ink); color:var(--paper)}
+  .btn.accent{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .pill{
+    display:inline-block; border:1.5px solid var(--rule); background:var(--paper-2);
+    padding:1px 9px; border-radius:20px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.5px;
+  }
+  .pill.accent{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .pill.yellow{background:var(--yellow)}
+  .pill.ok{background:#e4f0df; color:#2b5025}
+  .pill.warn{background:#fbe3d6; color:#7a2f10}
+
+  .note{font-family:var(--hand-2);font-size:15px;color:var(--ink-soft);transform:rotate(-.5deg)}
+  .arrow{
+    font-family:var(--hand-2); color:var(--accent); font-weight:700;
+    position:absolute; pointer-events:none;
+  }
+  .sparkle{font-family:var(--mono);color:var(--accent);font-size:10px}
+
+  .mono{font-family:var(--mono);font-size:11px}
+  .caption{font-family:var(--mono);font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:1.2px}
+  .label{font-family:var(--mono);font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+  .hand-label{font-family:var(--hand-2);font-size:17px;color:var(--ink);transform:rotate(-1deg)}
+
+  .scribble{
+    height:10px; background: repeating-linear-gradient(95deg, var(--ink-faint) 0 14px, transparent 14px 18px);
+    opacity:.4; border-radius:2px;
+  }
+  .scribble.short{width:60%}
+  .scribble.s2{width:80%}
+  .scribble.s3{width:40%}
+
+  .divider{height:0;border-top:1.5px dashed var(--ink-faint);margin:4px 0}
+  .kbd{
+    font-family:var(--mono);font-size:10px;border:1.5px solid var(--rule);
+    background:#fff;border-radius:4px;padding:1px 6px;box-shadow:1.5px 1.5px 0 var(--rule);
+  }
+
+  .placeholder{
+    border:1.5px dashed var(--ink-faint);border-radius:4px;
+    background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(0,0,0,.04) 8px 10px);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:10px;color:var(--ink-faint);
+    letter-spacing:1.5px;text-transform:uppercase;
+  }
+
+  /* ====== Chat blocks ====== */
+  .msg{display:flex;gap:8px;align-items:flex-start}
+  .avatar{
+    width:22px;height:22px;border:1.5px solid var(--rule);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--hand-2);font-weight:700;font-size:13px;flex-shrink:0;background:#fff
+  }
+  .avatar.ai{background:var(--ink);color:var(--paper)}
+  .msg .body{flex:1;font-size:14px;line-height:1.45;color:var(--ink)}
+  .msg .body cite{
+    display:inline-block;border-bottom:1.5px solid var(--accent);
+    font-style:normal;color:var(--accent);font-weight:700;font-family:var(--hand);
+    cursor:pointer;
+  }
+
+  /* ====== Direction 2 ====== */
+  .workbench{display:grid;grid-template-columns: 120px 1fr 160px;gap:10px;flex:1;min-height:0}
+  .tree{font-size:13px}
+  .tree ul{list-style:none;padding-left:12px;margin:4px 0}
+  .tree > ul{padding-left:0}
+  .tree li{padding:2px 0;color:var(--ink-soft);cursor:pointer;line-height:1.3}
+  .tree li.on{color:var(--accent);font-weight:700}
+  .tree li::before{content:"·";margin-right:4px;color:var(--ink-faint)}
+
+  /* ====== Direction 3: Canvas ====== */
+  .canvas{
+    flex:1;position:relative;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.12) 1px, transparent 0);
+    background-size: 20px 20px;
+    border:1.5px dashed var(--ink-faint);border-radius:4px;
+    overflow:hidden;
+  }
+  .node{
+    position:absolute; background:#fff; border:2px solid var(--rule);
+    border-radius:6px; padding:8px 10px; box-shadow:2px 2px 0 var(--rule);
+    font-size:12px; line-height:1.3; width:140px;
+  }
+  .node .ntag{font-family:var(--mono);font-size:9px;color:var(--ink-faint);letter-spacing:1px;display:block;margin-bottom:3px}
+  .node.input{border-color:var(--accent);background:#fff3ec}
+  .node.rule{background:var(--paper-2)}
+  .node.result{background:#e4f0df;border-color:#2b5025}
+
+  /* ====== Direction 4: Command Bar ====== */
+  .cmdbar{
+    border:2px solid var(--rule); border-radius:30px;
+    padding:10px 18px; background:#fff; display:flex;align-items:center;gap:10px;
+    box-shadow: 0 4px 0 var(--rule);
+  }
+  .cmdbar .prompt{flex:1;font-family:var(--hand);font-size:16px;color:var(--ink)}
+  .cmdbar .caret{width:2px;height:18px;background:var(--ink);animation:blink 1s infinite;display:inline-block;vertical-align:-4px;margin-left:2px}
+  @keyframes blink{50%{opacity:0}}
+
+  /* ====== Direction 5: Compliance ====== */
+  .uploaddrop{
+    border:2px dashed var(--accent); border-radius:8px;
+    padding:18px; text-align:center; background:#fff9f5;
+  }
+  .report-row{
+    display:grid;grid-template-columns:24px 1fr auto;gap:8px;align-items:start;
+    padding:8px 0;border-bottom:1.5px dashed var(--ink-faint);
+  }
+  .report-row:last-child{border-bottom:none}
+  .check{
+    width:22px;height:22px;border:2px solid var(--rule);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--hand-2);font-weight:700;font-size:14px;background:#fff;
+  }
+  .check.pass{background:#d6ebd0;color:#1f4a18}
+  .check.fail{background:#f5d4c9;color:#6b1f0a}
+  .check.warn{background:var(--yellow);color:#6b5010}
+
+  /* ====== Annotations ====== */
+  .scribble-circle{
+    position:absolute;border:2.5px solid var(--accent);border-radius:50%;
+    pointer-events:none;transform:rotate(-5deg);
+  }
+
+  /* ====== Tweaks ====== */
+  #tweaks{
+    position:fixed;right:18px;bottom:18px;width:260px;
+    background:var(--paper);border:2px solid var(--rule);border-radius:8px;
+    padding:14px; box-shadow:4px 4px 0 var(--rule);
+    display:none;z-index:100;
+  }
+  #tweaks.on{display:block}
+  #tweaks h3{font-family:var(--hand-2);font-size:22px;margin:0 0 8px}
+  #tweaks label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--ink-soft);text-transform:uppercase;margin-top:10px}
+  #tweaks input[type=range]{width:100%}
+  #tweaks .swatches{display:flex;gap:6px;margin-top:4px}
+  #tweaks .swatch{width:22px;height:22px;border:2px solid var(--rule);border-radius:50%;cursor:pointer}
+
+  .footer{
+    text-align:center; padding:40px 20px 20px;
+    font-family:var(--hand-2); color:var(--ink-soft); font-size:18px;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <h1>SANS<span style="color:var(--accent)">·</span>Codified</h1>
+      <span class="sub">Wireframes · v0.1</span>
+      <span class="stamp">5 directions</span>
+    </div>
+    <div class="mono" style="color:var(--ink-faint);font-size:11px">
+      rough sketches · not hi-fi · explore freely
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-dir="1"><span class="num">DIR 01</span>Chat-First</button>
+    <button class="tab" data-dir="2"><span class="num">DIR 02</span>Split Workbench</button>
+    <button class="tab" data-dir="3"><span class="num">DIR 03</span>Query Canvas</button>
+    <button class="tab" data-dir="4"><span class="num">DIR 04</span>Command Bar</button>
+    <button class="tab" data-dir="5"><span class="num">DIR 05</span>Compliance Studio</button>
+  </nav>
+</header>
+
+<main id="pages"></main>
+
+<aside id="tweaks">
+  <h3>Tweaks</h3>
+  <label>Accent hue</label>
+  <input type="range" id="hue" min="0" max="360" step="5" value="28">
+  <label>Paper warmth</label>
+  <div class="swatches" id="paperSwatches">
+    <div class="swatch" data-paper="#f5f1e8" style="background:#f5f1e8"></div>
+    <div class="swatch" data-paper="#f3efe3" style="background:#f3efe3"></div>
+    <div class="swatch" data-paper="#eef2ee" style="background:#eef2ee"></div>
+    <div class="swatch" data-paper="#fdfaf2" style="background:#fdfaf2"></div>
+    <div class="swatch" data-paper="#eaeae4" style="background:#eaeae4"></div>
+  </div>
+  <label>Hand font</label>
+  <select id="fontPick" style="width:100%;font-family:inherit;padding:4px;border:1.5px solid var(--rule);border-radius:4px">
+    <option value="'Kalam'">Kalam (default)</option>
+    <option value="'Architects Daughter'">Architects Daughter</option>
+    <option value="'Caveat'">Caveat</option>
+  </select>
+  <label>Grid dots</label>
+  <input type="range" id="grid" min="0" max="100" step="5" value="60">
+</aside>
+
+<div class="footer">
+  Pick a direction up top · five ways the AEC industry could find, ask and run SANS codes
+</div>
+
+<script id="tweak-defaults" type="application/json">
+/*EDITMODE-BEGIN*/{
+  "accentHue": 295,
+  "paper": "#eef2ee",
+  "handFont": "'Architects Daughter'",
+  "gridOpacity": 75
+}/*EDITMODE-END*/
+</script>
+
+<script src="assets/wf.js"></script>
+</body>
+</html>
