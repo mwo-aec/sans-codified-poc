@@ -102,6 +102,53 @@ function topbar({crumbs=[], actions=""}) {
     </div>`;
 }
 
+/* ============== LANDING ============== */
+function screenLanding(){
+  return `
+  <section class="screen" id="s-landing" data-screen-label="Landing">
+    <div class="landing-wrap">
+      <div class="landing-inner">
+        <div class="landing-brand">
+          <div class="brand-mark">S</div>
+          <div class="brand-name">Sans<em>·</em>Codified</div>
+        </div>
+
+        <div class="eyebrow">Proof of concept · v0.1</div>
+        <h1 class="h-display landing-title">A working prototype of South Africa's building code, made queryable.</h1>
+
+        <div class="landing-copy">
+          <p>
+            <strong>SANS·Codified</strong> is an exploration of how South Africa's National Building
+            Regulations (SANS 10400) could be made machine-readable, searchable, and runnable —
+            so designers, plan checkers, and contractors can find, ask, and verify clauses without
+            leaving their workflow.
+          </p>
+          <p>
+            Browse parts and clauses, ask questions of the standards in plain English, and assemble
+            compliance scenarios on an interactive canvas — all from one place.
+          </p>
+          <p class="faint" style="font-size:13px">
+            This is an early mock-up. Numbers, clauses, and AI answers are illustrative only.
+          </p>
+        </div>
+
+        <div class="landing-stats">
+          <span class="chip mono">22 parts</span>
+          <span class="chip mono">437 clauses</span>
+          <span class="chip mono">1 431 rules</span>
+          <span class="chip mono">192 tables</span>
+        </div>
+
+        <div class="landing-cta">
+          <button class="btn accent" onclick="go('home')" style="padding:12px 22px;font-size:15px">
+            Explore the app →
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
 /* ============== HOME ============== */
 function screenHome(){
   return `
@@ -1108,7 +1155,7 @@ function screenXrefs(){
 
 /* ---------- boot ---------- */
 const screens = document.getElementById('screens');
-screens.innerHTML = [screenHome(), screenPart(), screenClause(), screenSearch(), screenCanvas(), screenForms(), screenAllParts(), screenXrefs()].join('');
+screens.innerHTML = [screenLanding(), screenHome(), screenPart(), screenClause(), screenSearch(), screenCanvas(), screenForms(), screenAllParts(), screenXrefs()].join('');
 
 /* fill the 22-part grid */
 const partGrid = document.getElementById('part-grid');
@@ -1308,21 +1355,20 @@ function initCanvasDrag(){
 
 /* ---------- navigation ---------- */
 function go(name){
-  const map = {home:'s-home', part:'s-part', clause:'s-clause', search:'s-search', canvas:'s-canvas', forms:'s-forms', allparts:'s-allparts', xrefs:'s-xrefs'};
+  const map = {landing:'s-landing', home:'s-home', part:'s-part', clause:'s-clause', search:'s-search', canvas:'s-canvas', forms:'s-forms', allparts:'s-allparts', xrefs:'s-xrefs'};
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === map[name]));
   document.querySelectorAll('.nav-item[data-screen]').forEach(n => n.classList.toggle('active', n.dataset.screen === name));
   const chatBar = document.getElementById('canvas-chat-bar');
   if (chatBar) chatBar.style.display = name === 'canvas' ? 'flex' : 'none';
   if (name === 'canvas') requestAnimationFrame(initCanvasDrag);
+  const app = document.getElementById('app');
+  const hideSidebar = name === 'landing' || (typeof TW !== 'undefined' && TW.sidebar === 'off');
+  app.classList.toggle('no-sidebar', hideSidebar);
   try { localStorage.setItem('sansc-screen', name); } catch(e){}
   window.scrollTo({top:0});
   requestAnimationFrame(drawCanvasLines);
 }
 window.go = go;
-try {
-  const saved = localStorage.getItem('sansc-screen');
-  go(saved || 'home');
-} catch(e){ go('home'); }
 
 /* ---------- Tweaks ---------- */
 const TW = JSON.parse(
@@ -1347,9 +1393,10 @@ function applyTweaks(){
   root.style.setProperty('--font-ui', p.ui);
   root.style.setProperty('--font-display', p.disp);
 
-  // sidebar
+  // sidebar (force hidden on landing screen regardless of tweak)
   const app = document.getElementById('app');
-  app.classList.toggle('no-sidebar', TW.sidebar === 'off');
+  const onLanding = !!document.querySelector('#s-landing.active');
+  app.classList.toggle('no-sidebar', onLanding || TW.sidebar === 'off');
 
   // swatch active states
   document.querySelectorAll('#tw-swatches .tw-swatch').forEach(s =>
@@ -1368,6 +1415,7 @@ function applyTweaks(){
   requestAnimationFrame(drawCanvasLines);
 }
 applyTweaks();
+go('landing');
 
 function persist(k, v){
   TW[k] = v;
